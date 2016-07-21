@@ -1,0 +1,74 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    - users_alt_homebase:
+      - path: /srv/elasticsearch
+    - users_users:
+      - username: redfive
+        uid: 10000
+        group: elasticsearch
+        home: /srv/elasticsearch/redfive
+        name: RedFive Elasticsearch Instance
+    - users_groups:
+      - name: elasticsearch
+        gid: 10000
+    - elasticsearch_instances:
+      - owner: redfive
+        group: elasticsearch
+        home: /srv/elasticsearch/redfive
+        version: 2.1.0
+        plugins:
+            - name: 'mobz/elasticsearch-head'
+            - name: 'lmenezes/elasticsearch-kopf'
+        config:
+            cluster:
+                name: metronome
+                routing:
+                    allocation:
+                        awareness:
+                            attributes: zone
+            node:
+                name: "{{ ansible_hostname }}"
+            path:
+                conf: "elasticsearch/config"
+                data: "data"
+                work: "work"
+                logs: "logs"
+                plugins: "plugins"
+                scripts: "scripts"
+            transport:
+                tcp:
+                    port: 9300
+            http:
+                port: 9200
+                max_content_length: 100mb
+                max_initial_line_length: 4kb
+                max_header_size: 8kb
+                cors:
+                    allow_origin: "http://localhost:8080"
+            gateway:
+                expected_master_nodes: 2
+                expected_data_nodes: 1
+                recover_after_time: 10m
+            discovery:
+                zen:
+                    minimum_master_nodes: 2
+                    ping:
+                        unicast:
+                            hosts: '"esmaster-prod1.attestationlegale.fr:9300", "esmaster-prod2.attestationlegale.fr:9300", "esmaster-prod3.attestationlegale.fr:9300"'
+            marvel:
+                agent:
+                    exporters:
+                        id1:
+                            type: http
+                            host: '"http://esmaster-prod1.attestationlegale.fr:9201", "http://esmaster-prod2.attestationlegale.fr:9201", "http://esmaster-prod3.attestationlegale.fr:9201"'
+            index:
+                number_of_shards: 2
+            indices:
+                memory:
+                    index_buffer_size: 30%
+
+  roles:
+    - AttestationLegale.users

@@ -1,0 +1,6 @@
+---
+
+# Defaults vars file for elasticsearch role
+
+elasticsearch_baseurl: 'https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch'
+elasticsearch_instances: []

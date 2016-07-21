@@ -1,0 +1,12 @@
+---
+
+# Main tasks file for elasticsearch role
+
+- name: Download Elasticsearch
+  get_url: 
+    url: "{{ elasticsearch_baseurl~'/'~item.version~'/elasticsearch-'~item.version~'.tar.gz' }}"
+    dest: "{{ item.home~'elasticsearch-'~item.version~'.tar.gz' }}"
+    mode: "0644"
+  tags: [elasticseach]
+  with_items: "{{ elasticsearch_instances }}"
+  when: item.version is defined
