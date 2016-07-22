@@ -138,8 +138,14 @@ bootstrap.mlockall: {{ item.config.bootstrap.mlockall|default('true') }}
 {% endif %}{# // bootstrap #}
 
 ############################## Network And HTTP ###############################
+{% if item.config.transport is defined %}
+{% if item.config.transport.tcp is defined %}
 transport.tcp.port: {{ item.config.transport.tcp.port|default('9300') }}
 transport.tcp.compress: {{ item.config.transport.tcp.compress|default('true') }}
+{% endif %}{# // transport.tcp #}
+{% else %}
+transport.tcp.port: 9300
+{% endif %}{# // transport #}
 http.enabled: {{ item.config.http.enabled|default('true') }}
 http.port: {{ item.config.http.port|default('9200') }}
 {% if item.config.http.max_content_length is defined %}
