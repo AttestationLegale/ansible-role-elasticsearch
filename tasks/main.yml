@@ -77,3 +77,15 @@
   with_items: "{{ elasticsearch_instances }}"
   when: item.version is defined
   tags: [elasticsearch]
+
+- name: Install plugins
+  elasticsearch_plugin:
+    name: "{{ item.1.name }}"
+    state: "{{ item.1.state|default('present') }}"
+    plugin_bin: "{{ item.0.home~'/elasticsearch-'~item.0.version~'/bin/plugin' }}"
+    plugin_dir: "{{ item.0.home~'/plugins/' }}"
+  with_subelements:
+    - "{{ elasticsearch_instances }}"
+    - plugins
+  when: item.0.version is defined
+  tags: [elasticsearch]
