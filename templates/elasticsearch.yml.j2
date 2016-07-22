@@ -157,9 +157,9 @@ http.max_initial_line_length: {{ item.config.http.max_initial_line_length }}
 {% if item.config.http.max_header_size is defined %}
 http.max_header_size: {{ item.config.http.max_header_size }}
 {% endif %}
-http.cors.enabled: {{ item.config.http.cors.enabled|default('false') }}
 {% if item.config.http %}
 {% if item.config.http.cors %}
+http.cors.enabled: {{ item.config.http.cors.enabled|default('false') }}
 {% if item.config.http.cors.allow_origin is defined %}
 http.cors.allow-origin: "{{ item.config.http.cors.allow_origin }}"
 {% endif %}{# // http.cors.allow_origin #}
