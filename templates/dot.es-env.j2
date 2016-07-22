@@ -1,0 +1,7 @@
+{% if item.config.java is defined %}
+ES_HEAP_SIZE={{ item.config.java.heap_size|default('2gb') }}
+{% else %}
+ES_HEAP_SIZE=2gb
+{% endif %}{# // java #}
+
+export ES_HEAP_SIZE

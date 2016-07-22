@@ -1,0 +1,239 @@
+# {{ ansible_managed }}
+################################### Cluster ###################################
+
+cluster.name: {{ item.config.cluster.name|default('elasticsearch-'~item.version) }}
+
+{% if item.config.cluster.routing is defined %}
+{% if item.config.cluster.routing.allocation is defined %}
+
+######################### Shard Allocation  #########################
+{% if item.config.cluster.routing.allocation.node_initial_primaries_recoveries is defined %}
+cluster.routing.allocation.node_initial_primaries_recoveries: {{ item.config.cluster.routing.allocation.node_initial_primaries_recoveries }}
+{% endif %}{# // cluster.routing.allocation.node_initial_primaries_recoveries #}
+{% if item.config.cluster.routing.allocation.node_concurrent_recoveries is defined %}
+cluster.routing.allocation.node_concurrent_recoveries: {{ item.config.cluster.routing.allocation.node_concurrent_recoveries }}
+{% endif %}{# // cluster.routing.allocation.node_concurrent_recoveries #}
+{% if item.config.cluster.routing.allocation.awareness is defined %}
+
+######################### Shard Allocation Awareness #########################
+{% if item.config.cluster.routing.allocation.awareness.attributes is defined %}
+cluster.routing.allocation.awareness.attributes: {{ item.config.cluster.routing.allocation.awareness.attributes }}
+{% endif %}{# // cluster.routing.allocation.awareness.attributes #}
+{% if item.config.cluster.routing.allocation.awareness.force is defined %}
+{% if item.config.cluster.routing.allocation.awareness.force.zone is defined %}
+{% if item.config.cluster.routing.allocation.awareness.force.zone.values is defined %}
+cluster.routing.allocation.awareness.force.zone.values: {{ item.config.cluster.routing.allocation.awareness.force.zone.values }}
+{% endif %}{# // cluster.routing.allocation.awareness.force.zone.values #}
+{% endif %}{# // cluster.routing.allocation.awareness.force.zone #}
+{% endif %}{# // cluster.routing.allocation.awareness.force #}
+{% endif %}{# // cluster.routing.allocation.awareness #}
+{% if item.config.cluster.routing.allocation.disk is defined %}
+{% if item.config.cluster.routing.allocation.disk.watermark is defined %}
+
+######################### Shard Allocation Watermark #########################
+{% if item.config.cluster.routing.allocation.disk.watermark.low is defined %}
+cluster.routing.allocation.disk.watermark.low: {{ item.config.cluster.routing.allocation.disk.watermark.low }}
+{% endif %}{# // cluster.routing.allocation.disk.watermark.low #}
+{% if item.config.cluster.routing.allocation.disk.watermark.high is defined %}
+cluster.routing.allocation.disk.watermark.high: {{ item.config.cluster.routing.allocation.disk.watermark.high }}
+{% endif %}{# // cluster.routing.allocation.disk.watermark.high #}
+{% endif %}{# // cluster.routing.allocation.disk.watermark #}
+{% endif %}{# // cluster.routing.allocation.disk #}
+{% endif %}{# // cluster.routing.allocation #}
+{% endif %}{# // cluster.routing #}
+
+#################################### Node #####################################
+
+node.name: {{ item.config.node.name|default(ansible_hostname) }}
+node.master: {{ item.config.node.master|default('true') }}
+node.data: {{ item.config.node.data|default('true') }}
+
+{% if item.config.index is defined %}
+#################################### Index ####################################
+{% if item.config.index.number_of_shards is defined %}
+index.number_of_shards: {{ item.config.index.number_of_shards }}
+{% endif %}{# // index.number_of_shards #}
+{% if item.config.index.number_of_replicas is defined %}
+index.number_of_replicas: {{ item.config.index.number_of_replicas }}
+{% endif %}{# // index.number_of_replicas #}
+{% if item.config.index.search is defined %}
+{% if item.config.index.search.slowlog is defined %}
+
+################################## Slow Log ##################################
+{% if item.config.index.search.slowlog.threshold is defined %}
+{% if item.config.index.search.slowlog.threshold.query is defined %}
+{% if item.config.index.search.slowlog.threshold.query.warn is defined %}
+index.search.slowlog.threshold.query.warn: {{ item.config.index.search.slowlog.threshold.query.warn }}
+{% endif %}{# // index.search.slowlog.threshold.query.warn #}
+{% if item.config.index.search.slowlog.threshold.query.info is defined %}
+index.search.slowlog.threshold.query.info: {{ item.config.index.search.slowlog.threshold.query.info }}
+{% endif %}{# // index.search.slowlog.threshold.query.info #}
+{% if item.config.index.search.slowlog.threshold.query.debug is defined %}
+index.search.slowlog.threshold.query.debug: {{ item.config.index.search.slowlog.threshold.query.debug }}
+{% endif %}{# // index.search.slowlog.threshold.query.debug #}
+{% if item.config.index.search.slowlog.threshold.query.trace is defined %}
+index.search.slowlog.threshold.query.trace: {{ item.config.index.search.slowlog.threshold.query.trace }}
+{% endif %}{# // index.search.slowlog.threshold.query.trace #}
+{% endif %}{# // index.search.slowlog.threshold.query #}
+{% if item.config.index.search.slowlog.threshold.fetch is defined %}
+{% if item.config.index.search.slowlog.threshold.fetch.warn is defined %}
+index.search.slowlog.threshold.fetch.warn: {{ item.config.index.search.slowlog.threshold.fetch.warn }}
+{% endif %}{# // index.search.slowlog.threshold.fetch.warn #}
+{% if item.config.index.search.slowlog.threshold.fetch.info is defined %}
+index.search.slowlog.threshold.fetch.info: {{ item.config.index.search.slowlog.threshold.fetch.info }}
+{% endif %}{# // index.search.slowlog.threshold.fetch.info #}
+{% if item.config.index.search.slowlog.threshold.fetch.debug is defined %}
+index.search.slowlog.threshold.fetch.debug: {{ item.config.index.search.slowlog.threshold.fetch.debug }}
+{% endif %}{# // index.search.slowlog.threshold.fetch.debug #}
+{% if item.config.index.search.slowlog.threshold.fetch.trace is defined %}
+index.search.slowlog.threshold.fetch.trace: {{ item.config.index.search.slowlog.threshold.fetch.trace }}
+{% endif %}{# // index.search.slowlog.threshold.fetch.trace #}
+{% endif %}{# // index.search.slowlog.threshold.fetch #}
+{% endif %}{# // index.search.slowlog.threshold #}
+{% endif %}{# // index.search.slowlog #}
+{% endif %}{# // index.search #}
+{% if item.config.index.indexing is defined %}
+{% if item.config.index.indexing.slowlog is defined %}
+{% if item.config.index.indexing.slowlog.index is defined %}
+{% if item.config.index.indexing.slowlog.index.warn is defined %}
+index.indexing.slowlog.threshold.index.warn: {{ item.config.index.indexing.slowlog.index.warn }}
+{% endif %}{# // index.indexing.slowlog.index.warn #}
+{% if item.config.index.indexing.slowlog.index.info is defined %}
+index.indexing.slowlog.threshold.index.info: {{ item.config.index.indexing.slowlog.index.info }}
+{% endif %}{# // index.indexing.slowlog.index.info #}
+{% if item.config.index.indexing.slowlog.index.debug is defined %}
+index.indexing.slowlog.threshold.index.debug: {{ item.config.index.indexing.slowlog.index.debug }}
+{% endif %}{# // index.indexing.slowlog.index.debug #}
+{% if item.config.index.indexing.slowlog.index.trace is defined %}
+index.indexing.slowlog.threshold.index.trace: {{ item.config.index.indexing.slowlog.index.trace }}
+{% endif %}{# // index.indexing.slowlog.index.trace #}
+{% endif %}{# // index.indexing.slowlog.index #}
+{% endif %}{# // index.indexing.slowlog #}
+{% endif %}{# // index.indexing #}
+{% endif %}{# // index #}
+
+{% if item.config.indices is defined %}
+#################################### Indexing ####################################
+{% if item.config.indices.memory is defined %}
+{% if item.config.indices.memory.index_buffer_size is defined %}
+indices.memory.index_buffer_size: {{ item.config.indices.memory.index_buffer_size }}
+{% endif %}{# // indices.memory.index_buffer_size is defined #}
+{% endif %}{# // indices.memory #}
+{% if item.config.indices.recovery is defined %}
+indices.recovery.concurrent_streams: {{ item.config.indices.recovery }}
+{% endif %}{# // indices.recovery #}
+{% endif %}{# // indices #}
+
+#################################### Paths ####################################
+path.conf: {{ item.home~'/elasticsearch-'~item.version }}
+path.data: {{ item.home~'/data' }}
+path.work: {{ item.home~'/work' }}
+path.logs: {{ item.home~'/logs' }}
+path.plugins: {{ item.home~'/plugins' }}
+path.scripts: {{ item.home~'/scripts' }}
+
+{% if item.config.bootstrap is defined %}
+################################### Memory ####################################
+bootstrap.mlockall: {{ item.config.bootstrap.mlockall|default('true') }}
+{% endif %}{# // bootstrap #}
+
+############################## Network And HTTP ###############################
+transport.tcp.port: {{ item.config.transport.tcp.port|default('9300') }}
+transport.tcp.compress: {{ item.config.transport.tcp.compress|default('true') }}
+http.enabled: {{ item.config.http.enabled|default('true') }}
+http.port: {{ item.config.http.port|default('9200') }}
+{% if item.config.http.max_content_length is defined %}
+http.max_content_length: {{ item.config.http.max_content_length }}
+{% endif %}
+{% if item.config.http.max_initial_line_length is defined %}
+http.max_initial_line_length: {{ item.config.http.max_initial_line_length }}
+{% endif %}
+{% if item.config.http.max_header_size is defined %}
+http.max_header_size: {{ item.config.http.max_header_size }}
+{% endif %}
+http.cors.enabled: {{ item.config.http.cors.enabled|default('false') }}
+{% if item.config.http %}
+{% if item.config.http.cors %}
+{% if item.config.http.cors.allow_origin is defined %}
+http.cors.allow-origin: "{{ item.config.http.cors.allow_origin }}"
+{% endif %}{# // http.cors.allow_origin #}
+{% endif %}{# // http.cors #}
+{% endif %}{# // http #}
+
+{% if item.config.gateway is defined %}
+################################### Gateway ###################################
+gateway.expected_master_nodes: {{ item.config.gateway.expected_master_nodes }}
+gateway.expected_data_nodes: {{ item.config.gateway.expected_data_nodes }}
+gateway.recover_after_time: {{ item.config.gateway.recover_after_time }}
+{% endif %}
+
+{% if item.config.discovery is defined %}
+################################## Discovery ##################################
+{% if item.config.discovery.zen is defined %}
+{% if item.config.discovery.zen.minimum_master_nodes is defined %}
+discovery.zen.minimum_master_nodes: {{ item.config.discovery.zen.minimum_master_nodes }}
+{% endif %}{# // item.config.discovery.zen.minimum_master_nodes #}
+{% if item.config.discovery.zen.master_election is defined %}
+discovery.zen.master_election.filter_data: {{ item.config.discovery.zen.master_election.filter_data|default('true') }}
+{% endif %}{# // item.config.discovery.zen.master_election #}
+{% if item.config.discovery.zen.ping is defined %}
+{% if item.config.discovery.zen.ping.unicast is defined %}
+{% if item.config.discovery.zen.ping.unicast.hosts is defined %}
+discovery.zen.ping.unicast.hosts: [ {{ item.config.discovery.zen.ping.unicast.hosts }} ]
+{% endif %}{# // discovery.zen.ping.unicast.hosts #}
+{% endif %}{# // discovery.zen.ping.unicast #}
+{% endif %}{# // discovery.zen.ping #}
+{% endif %}{# // discovery.zen #}
+{% endif %}{# // discovery #}
+
+{% if item.config.script is defined %}
+################################### Scripts ###################################
+{% if item.config.script.inline is defined %}
+script.inline: {{ item.config.script.inline }}
+{% endif %}{# // script.inline #}
+{% if item.config.script.indexed is defined %}
+script.indexed: {{ item.config.script.indexed }}
+{% endif %}{# // script.indexed #}
+{% if item.config.script.file is defined %}
+script.file: {{ item.config.script.file }}
+{% endif %}{# // script.file #}
+{% endif %}{# // script #}
+
+{% if item.config.monitor is defined %}
+################################## Monitor ################################
+{% if item.config.monitor.jvm is defined %}
+{% if item.config.monitor.jvm.gc is defined %}
+{% if item.config.monitor.jvm.gc.young is defined %}
+monitor.jvm.gc.young.warn: {{ item.config.monitor.jvm.gc.young.warn|default('1000ms') }}
+monitor.jvm.gc.young.info: {{ item.config.monitor.jvm.gc.young.info|default('700ms') }}
+monitor.jvm.gc.young.debug: {{ item.config.monitor.jvm.gc.young.debug|default('400ms') }}
+{% endif %}{# // monitor.jvm.gc.young #}
+{% if item.config.monitor.jvm.gc.old is defined %}
+monitor.jvm.gc.old.warn: {{ item.config.monitor.jvm.gc.old.warn|default('10s') }}
+monitor.jvm.gc.old.info: {{ item.config.monitor.jvm.gc.old.info|default('5s') }}
+monitor.jvm.gc.old.debug: {{ item.config.monitor.jvm.gc.old.debug|default('2s') }}
+{% endif %}{# // monitor.jvm.gc.old #}
+{% endif %}{# // monitor.jvm.gc #}
+{% endif %}{# // monitor.jvm #}
+{% endif %}{# // monitor #}
+
+{% if item.config.marvel is defined %}
+################################## Marvel ################################
+{% if item.config.marvel.agent is defined %}
+{% if item.config.marvel.agent.exporters is defined %}
+{% if item.config.marvel.agent.exporters.id1 is defined %}
+{% if item.config.marvel.agent.exporters.id1.type is defined %}
+marvel.agent.exporters.id1.type: {{ item.config.marvel.agent.exporters.id1.type }}
+{% endif %}{# // marvel.agent.exporters.id1.type #}
+{% if item.config.marvel.agent.exporters.id1.host is defined %}
+marvel.agent.exporters.id1.host: [ {{ item.config.marvel.agent.exporters.id1.host }} ]
+{% endif %}{# // marvel.agent.exporters.id1.host #}
+{% endif %}{# // marvel.agent.exporters.id1 #}
+{% endif %}{# // marvel.agent.exporters #}
+{% endif %}{# // marvel.agent #}
+{% endif %}{# // marvel #}
+
+################################## Misc ################################
+{% if item.config.action is defined %}
+action.destructive_requires_name: {{ item.config.action.destructive_requires_name|default('false') }}
+{% endif %}{# // action #}

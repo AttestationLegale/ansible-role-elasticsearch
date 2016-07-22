@@ -1,0 +1,4 @@
+#!/bin/sh
+
+. $HOME/.es-env
+$HOME/elasticsearch-{{ item.version }}/bin/elasticsearch -Dnetwork.host={{ ansible_hostname }} -d

@@ -44,5 +44,21 @@ script:
   - >
     sudo ls -al /srv/elasticsearch/redfive/
 
+  # Debug 2
+  - >
+    sudo ls -al /srv/elasticsearch/redfive/elasticsearch-2.1.0
+
+  # Debug 3
+  - >
+    sudo cat /srv/elasticsearch/redfive/elasticsearch-2.1.0/config/elasticsearch.yml
+
+  # Debug 4
+  - >
+    sudo cat /srv/elasticsearch/redfive/.es-env
+
+  # Debug 5
+  - >
+    sudo cat /srv/elasticsearch/redfive/bin/els
+
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

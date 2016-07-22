@@ -3,6 +3,7 @@
   remote_user: root
 
   vars:
+    - users_per_user_group: false
     - users_alt_homebase:
       - path: /srv/elasticsearch
     - users_users:
@@ -24,20 +25,19 @@
             - name: 'lmenezes/elasticsearch-kopf'
         config:
             cluster:
-                name: metronome
+                name: test
                 routing:
                     allocation:
+                        node_initial_primaries_recoveries: 20
+                        node_concurrent_recoveries: 4
                         awareness:
                             attributes: zone
+                        disk:
+                            watermark:
+                                low: 10gb
+                                high: 5gb
             node:
                 name: "{{ ansible_hostname }}"
-            path:
-                conf: "elasticsearch/config"
-                data: "data"
-                work: "work"
-                logs: "logs"
-                plugins: "plugins"
-                scripts: "scripts"
             transport:
                 tcp:
                     port: 9300
@@ -57,18 +57,42 @@
                     minimum_master_nodes: 2
                     ping:
                         unicast:
-                            hosts: '"esmaster-prod1.attestationlegale.fr:9300", "esmaster-prod2.attestationlegale.fr:9300", "esmaster-prod3.attestationlegale.fr:9300"'
+                            hosts: '"master1:9300", "master2:9300", "master3:9300"'
             marvel:
                 agent:
                     exporters:
                         id1:
                             type: http
-                            host: '"http://esmaster-prod1.attestationlegale.fr:9201", "http://esmaster-prod2.attestationlegale.fr:9201", "http://esmaster-prod3.attestationlegale.fr:9201"'
+                            host: '"http://master1:9200", "http://master2:9200", "http://master3:9200"'
             index:
                 number_of_shards: 2
+                search:
+                    slowlog:
+                        threshold:
+                            query:
+                                warn: 10s
+                                info: 5s
+                                debug: 2s
+                                trace: 500ms
+                            fetch:
+                                warn: 1s
+                                info: 800ms
+                                debug: 500ms
+                                trace: 200ms
+                indexing:
+                    slowlog:
+                        threshold:
+                            index:
+                                warn: 10s
+                                info: 5s
+                                debug: 2s
+                                trace: 500ms
             indices:
                 memory:
                     index_buffer_size: 30%
+                recovery:
+                    concurrent_streams: 6
 
   roles:
     - AttestationLegale.users
+    - ansible-role-elasticsearch

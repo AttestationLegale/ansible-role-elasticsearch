@@ -2,11 +2,78 @@
 
 # Main tasks file for elasticsearch role
 
-- name: Download Elasticsearch
-  get_url: 
-    url: "{{ elasticsearch_baseurl~'/'~item.version~'/elasticsearch-'~item.version~'.tar.gz' }}"
-    dest: "{{ item.home~'elasticsearch-'~item.version~'.tar.gz' }}"
-    mode: "0644"
-  tags: [elasticseach]
+- name: Check if elasticsearch is installed
+  stat:
+    path: "{{ item.home~'/elasticsearch-'~item.version }}"
+  register: esdir
   with_items: "{{ elasticsearch_instances }}"
   when: item.version is defined
+  tags: [elasticsearch]
+
+- name: Download and Extract elasticsearch
+  unarchive:
+    src: "{{ elasticsearch_baseurl~'/'~item.item.version~'/elasticsearch-'~item.item.version~'.tar.gz' }}"
+    dest: "{{ item.item.home }}"
+    owner: "{{ item.item.owner }}"
+    group: "{{ item.item.group }}"
+    mode: "0750"
+    copy: "no"
+  with_items: "{{ esdir.results }}"
+  when: item.item.version is defined and not item.stat.exists
+  tags: [elasticsearch]
+
+- name: Fix permissions
+  file:
+    path: "{{ item.home~'/elasticsearch-'~item.version }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    recurse: yes
+  with_items: "{{ elasticsearch_instances }}"
+  when: item.version is defined
+  tags: [elasticsearch]
+
+- name: Make sure elasticsearch paths exist
+  file:
+    path: "{{ item[0].home~'/'~item[1] }}"
+    state: directory
+    owner: "{{ item[0].owner }}"
+    group: "{{ item[0].group }}"
+    mode: "0755"
+  with_nested: 
+    - "{{ elasticsearch_instances }}"
+    - ['bin', 'data', 'work', 'logs', 'plugins', 'scripts']
+  when: item[0].version is defined
+  tags: [elasticsearch]
+
+- name: Push elasticsearch config
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ item.home~'/elasticsearch-'~item.version~'/config/elasticsearch.yml' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  with_items: "{{ elasticsearch_instances }}"
+  when: item.version is defined
+  tags: [elasticsearch]
+
+- name: Push elasticsearch env file
+  template:
+    src: dot.es-env.j2
+    dest: "{{ item.home~'/.es-env' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0640"
+  with_items: "{{ elasticsearch_instances }}"
+  when: item.version is defined
+  tags: [elasticsearch]
+
+- name: Push elasticsearch startup script
+  template:
+    src: els.j2
+    dest: "{{ item.home~'/bin/els' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0554"
+  with_items: "{{ elasticsearch_instances }}"
+  when: item.version is defined
+  tags: [elasticsearch]
