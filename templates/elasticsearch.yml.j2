@@ -168,10 +168,16 @@ http.cors.allow-origin: "{{ item.config.http.cors.allow_origin }}"
 
 {% if item.config.gateway is defined %}
 ################################### Gateway ###################################
+{% if item.config.gateway.expected_master_nodes is defined %}
 gateway.expected_master_nodes: {{ item.config.gateway.expected_master_nodes }}
+{% endif %}{# // gateway.expected_master_nodes #}
+{% if item.config.gateway.expected_data_nodes is defined %}
 gateway.expected_data_nodes: {{ item.config.gateway.expected_data_nodes }}
+{% endif %}{# // gateway.expected_data_nodes #}
+{% if item.config.gateway.recover_after_time is defined %}
 gateway.recover_after_time: {{ item.config.gateway.recover_after_time }}
-{% endif %}
+{% endif %}{# // gateway.recover_after_time #}
+{% endif %}{# // gateway #}
 
 {% if item.config.discovery is defined %}
 ################################## Discovery ##################################
