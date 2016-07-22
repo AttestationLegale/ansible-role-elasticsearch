@@ -6,16 +6,10 @@ The elasticsearch role allows you to create dedicated instances running under a 
 
 This role performs the following tasks:
 
-  - create /home/{{ user }}/etc/php5/fpm/php.ini
-  - create /home/{{ user }}/etc/php5/fpm/elasticsearch.conf
-  - create /home/{{ user }}/etc/php5/fpm/env.conf
-  - create /home/{{ user }}/etc/php5/fpm/pool.d/{{ user }}.conf
-  - create /home/{{ user }}/usr/lib/php5/php5-fpm-checkconf
-  - create /home/{{ user }}/usr/lib/php5/php5-fpm-reopenlogs
-  - create /home/{{ user }}/usr/lib/php5/sessionclean
-  - create /etc/cron.d/php5-{{ user }} (cronjob calling /home/{{ user }}/usr/lib/php5/sessionclean for sessions cleanup)
-  - create /etc/logrotate.d/php5-fpm-{{ user }} (to rotate php5-fpm logs for this instance)
-  - create /lib/systemd/system/php5-fpm-{{ user }}.service (so that your instance can be managed with systemctl)
+  - download and exrtact elasticsearch in /home/{{ user }}/elastcsearch-{{ version }}
+  - push /home/{{ user }}/elastcsearch-{{ version }}/config/elasticsearch.yml
+  - push /home/{{ user }}/.es-env
+  - push /home/{{ user }}/bin/els # startup script
 
 
 ## Requirements
@@ -49,6 +43,7 @@ None
           group: bar
           home: /home/foo
           version: 2.1.0
+          config: []
 ```
 
 ## License

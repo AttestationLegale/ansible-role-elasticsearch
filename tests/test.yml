@@ -7,18 +7,18 @@
     - users_alt_homebase:
       - path: /srv/elasticsearch
     - users_users:
-      - username: redfive
+      - username: toto
         uid: 10000
         group: elasticsearch
-        home: /srv/elasticsearch/redfive
-        name: RedFive Elasticsearch Instance
+        home: /srv/elasticsearch/toto
+        name: Toto Elasticsearch Instance
     - users_groups:
       - name: elasticsearch
         gid: 10000
     - elasticsearch_instances:
-      - owner: redfive
+      - owner: toto
         group: elasticsearch
-        home: /srv/elasticsearch/redfive
+        home: /srv/elasticsearch/toto
         version: 2.1.0
         plugins:
             - name: 'mobz/elasticsearch-head'
