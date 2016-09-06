@@ -200,6 +200,15 @@ discovery.zen.ping.unicast.hosts: [ {{ item.config.discovery.zen.ping.unicast.ho
 
 {% if item.config.script is defined %}
 ################################### Scripts ###################################
+{% if item.config.script.engine is defined %}
+{% if item.config.script.engine.groovy is defined %}
+{% if item.config.script.engine.groovy.inline is defined %}
+{% if item.config.script.engine.groovy.inline.search is defined %}
+script.engine.groovy.inline.search: {{ item.config.script.engine.groovy.inline.search }}
+{% endif %}{# // engine.groovy.inline.search #}
+{% endif %}{# // engine.groovy.inline #}
+{% endif %}{# // engine.groovy #}
+{% endif %}{# // engine #}
 {% if item.config.script.inline is defined %}
 script.inline: {{ item.config.script.inline }}
 {% endif %}{# // script.inline #}
